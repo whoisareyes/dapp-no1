@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+import Web3 from 'web3';
 import Token from '../abis/Token.json'
 import Exchange from '../abis/Exchange.json'
 
@@ -10,7 +10,8 @@ import {
  } from './actions'
 
 export const loadWeb3 = (dispatch) => {
-    const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
+    // const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545')
+    const web3 = new Web3('http://127.0.0.1:7545')
     dispatch(web3Loaded(web3))
     return web3
 }
@@ -29,8 +30,7 @@ export const loadToken = async (web3, networkId, dispatch) => {
         dispatch(tokenLoaded(token))
         return token
     } catch (error) {
-        console.log(error)
-        window.alert('Contract not deployed to the current network. Please select another network with Metamask')
+        console.log('Contract not deployed to the current network. Please select another network with Metamask')
         return null
     }
     
@@ -42,7 +42,7 @@ export const loadExchange = async (web3, networkId, dispatch) => {
         dispatch(exchangeLoaded(exchange))
         return exchange
     } catch (error) {
-        window.alert('Exchange not deployed to the current network. Please select another network with Metamask')
+        console.log('Exchange not deployed to the current network. Please select another network with Metamask')
         return null
     }
     
