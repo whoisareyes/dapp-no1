@@ -13,7 +13,7 @@ class Navbar extends Component {
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
                         <a className="nav-link small"
-                            href={'https://etherscan.io/address/${this.props.account}'}
+                            href={`https://etherscan.io/address/${this.props.account}`}
                             target="_bank"
                             rel="noopener noreferrer"
                         >
