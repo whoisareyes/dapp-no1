@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import configureStore from './store/configureStore';
+import { Provider } from 'react-redux';
 import App from './components/App';
-import 'bootstrap';
+import 'bootstrap'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <Provider store={configureStore()}>
+      <App />
+    </Provider>,
   document.getElementById('root')
 );
