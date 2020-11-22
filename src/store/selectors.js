@@ -82,15 +82,15 @@ export const cancelledOrdersSelector = createSelector(cancelledOrders, o => o)
 const decorateFilledOrder = (order, previousOrder) => {
     return({
         ...order,
-        tokenPricelass: tokenPricelass(order.tokenPice, order.id, previousOrder)
+        tokenPriceClass: tokenPriceClass(order.tokenPice, order.id, previousOrder)
     })
 }
 
-const tokenPricelass = (tokenPrice, orderId, previousOrder) => {
+const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
     if(previousOrder.id === orderId){
         return GREEN
     }
-    if(previousOrder.tokenPrice<= tokenPrice){
+    if(previousOrder.tokenPrice <= tokenPrice){
         return GREEN
     }else{
         return RED
