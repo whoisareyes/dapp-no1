@@ -149,3 +149,73 @@ const decorateOrderBookOrder =(order) => {
         orderFillClass: orderType === 'buy' ? 'sell' : 'buy'
     })
 }
+
+export const myFilledOrdersLoadedSelector = createSelector(filledOrdersLoaded, l => l )
+export const myFilledOrdersSelector = createSelector(
+    account,
+    filledOrders,
+    (account, orders) => {
+        orders = orders.filter((o) => o.user === account || o.userFill === account)
+        orders = orders.sort((a,b) => a.timestamp - b.timestamp)
+        orders = decorateMyFilledOrders(orders, account)
+        return orders
+    }
+)
+
+const decorateMyFilledOrders = (orders, account) => {
+    return (
+        orders.map((order) => {
+            order = decorateOrder(order)
+            order = decorateMyFilledOrder(order, account)
+            return order
+        })
+    )
+}
+
+const decorateMyFilledOrder = (order, account ) => {
+    const myOrder = order.user === account
+    let orderType
+    if(myOrder){
+        orderType = order.tokenGive === ETHER_ADDRESS ? 'buy' : 'sell'
+    }else {
+        orderType = order.tokenGive === ETHER_ADDRESS ? 'sell' : 'buy'
+    }
+    return({
+        ...order,
+        orderType,
+        orderTypeClass: (orderType === 'buy' ? GREEN : RED),
+        orderSign: (orderType === 'buy' ? '+' : '-')
+    })
+}
+
+export const myOpenOrdersLoadedSelector = createSelector(orderBookLoaded, l => l)
+
+export const myOpenOrdersSelector = createSelector(
+    account,
+    openOrders,
+    (account, orders) => {
+        orders = orders.filter((o) => o.user === account)
+        orders = decorateMyOpenOrders(orders)
+        orders = orders.sort((a,b) => b.timestamp - a.timestamp)
+        return orders
+    }
+)
+
+const decorateMyOpenOrders = (orders) => {
+    return (
+        orders.map((order) => {
+            order = decorateOrder(order)
+            order = decorateMyOpenOrder(order, account)
+            return(order)
+        })
+    )
+}
+
+const decorateMyOpenOrder = (order, account) => {
+    let orderType = order.tokenGive === ETHER_ADDRESS ? 'buy' : 'sell'
+    return({
+        ...order,
+        orderType,
+        orderTypeClass: (orderType === 'buy'? GREEN : RED)
+    })
+}
