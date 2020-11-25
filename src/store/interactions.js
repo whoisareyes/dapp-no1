@@ -9,12 +9,14 @@ import {
     exchangeLoaded,
     cancelledOrdersLoaded,
     filledOrdersLoaded,
-    allOrdersLoaded
+    allOrdersLoaded,
+    orderCancelling,
+    orderCancelled
  } from './actions'
 
 export const loadWeb3 = (dispatch) => {
-    // const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545')
-    const web3 = new Web3('http://127.0.0.1:7545')
+    const web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:7545')
+    // const web3 = new Web3('http://127.0.0.1:7545')
     dispatch(web3Loaded(web3))
     return web3
 }
@@ -62,4 +64,28 @@ export const loadAllOrders = async (exchange, dispatch) => {
     const orderStream = await exchange.getPastEvents('Order', {fromBlock: 0})
     const allOrders = orderStream.map((event)=> event.returnValues)
     dispatch(allOrdersLoaded(allOrders))
+}
+
+export const cancelOrder = (dispatch, exchange, order, account) => {
+    exchange.methods.cancelOrder(order.id).send({from: account})
+    .on('transactionHash', (hash) => {
+        dispatch(orderCancelling())
+    })
+    .on('error', (error) => {
+        console.log(error)
+        window.alert('There was an error')
+    })
+}
+
+export const subscribeToEvents = async (exchange, dispatch) => {
+    await exchange.events.Cancel({}, (error, event) => {
+        
+        if(error){
+
+            console.log('fucking error occur', error)
+        }else {dispatch(orderCancelled(event.returnValues))}
+    })
+    // exchange.events.Cancel().on('changed', (event) => {
+    //     dispatch(orderCancelled(event.returnValues))
+    // })
 }

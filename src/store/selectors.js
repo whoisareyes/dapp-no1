@@ -258,3 +258,6 @@ export const priceChartSelector = createSelector(
          })
         return graphData
     }
+
+    const orderCancelling = state => get(state, 'exchange.orderCancelling', false)
+    export const orderCancellingSelector = createSelector(orderCancelling, s => s)
