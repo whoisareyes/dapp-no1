@@ -11,7 +11,9 @@ import {
     filledOrdersLoaded,
     allOrdersLoaded,
     orderCancelling,
-    orderCancelled
+    orderCancelled,
+    orderFilling,
+    orderFilled
  } from './actions'
 
 export const loadWeb3 = (dispatch) => {
@@ -79,13 +81,29 @@ export const cancelOrder = (dispatch, exchange, order, account) => {
 
 export const subscribeToEvents = async (exchange, dispatch) => {
     await exchange.events.Cancel({}, (error, event) => {
-        
         if(error){
-
-            console.log('fucking error occur', error)
-        }else {dispatch(orderCancelled(event.returnValues))}
+            console.log(error)
+        }
+        else {dispatch(orderCancelled(event.returnValues))}
     })
-    // exchange.events.Cancel().on('changed', (event) => {
-    //     dispatch(orderCancelled(event.returnValues))
-    // })
+
+    await exchange.events.Trade({}, (error, event) => {
+        if(error){
+            console.log(error)
+        }
+        else {dispatch(orderFilled(event.returnValues))}
+    })
+}
+
+export const fillOrder = (dispatch, exchange, order, account) => {
+    console.log('filling order for account:', account)
+
+    exchange.methods.fillOrder(order.id).send({from: account})
+    .on('transactionHash', (hash) => {
+        dispatch(orderFilling())
+    })
+    .on('error', (error) => {
+        console.log(error)
+        window.alert('There was an error')
+    })
 }
