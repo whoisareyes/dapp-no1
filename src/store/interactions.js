@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import Token from '../abis/Token.json'
 import Exchange from '../abis/Exchange.json'
+import { ETHER_ADDRESS } from '../helpers'
 
 import { 
     web3Loaded,
@@ -13,7 +14,12 @@ import {
     orderCancelling,
     orderCancelled,
     orderFilling,
-    orderFilled
+    orderFilled,
+    etherBalanceLoaded,
+    tokenBalanceLoaded,
+    exchangeEtherBalanceLoaded,
+    exchangeTokenBalanceLoaded,
+    balancesLoaded
  } from './actions'
 
 export const loadWeb3 = (dispatch) => {
@@ -107,3 +113,28 @@ export const fillOrder = (dispatch, exchange, order, account) => {
         window.alert('There was an error')
     })
 }
+
+export const loadBalances = async (dispatch, web3, exchange, token, account) => {
+    if(typeof account !== 'undefined') {
+        // Ether balance in wallet
+        const etherBalance = await web3.eth.getBalance(account)
+        dispatch(etherBalanceLoaded(etherBalance))
+  
+        // Token balance in wallet
+        const tokenBalance = await token.methods.balanceOf(account).call()
+        dispatch(tokenBalanceLoaded(tokenBalance))
+  
+        // Ether balance in exchange
+        const exchangeEtherBalance = await exchange.methods.balanceOf(ETHER_ADDRESS, account).call()
+        dispatch(exchangeEtherBalanceLoaded(exchangeEtherBalance))
+  
+        // Token balance in exchange
+        const exchangeTokenBalance = await exchange.methods.balanceOf(token.options.address, account).call()
+        dispatch(exchangeTokenBalanceLoaded(exchangeTokenBalance))
+  
+        // Trigger all balances loaded
+        dispatch(balancesLoaded())
+      } else {
+        window.alert('Please login with MetaMask')
+      }  
+} 

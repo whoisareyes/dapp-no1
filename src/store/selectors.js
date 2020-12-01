@@ -1,13 +1,19 @@
 import { get, reject, groupBy, maxBy, minBy } from 'lodash'
 import { createSelector } from 'reselect'
-import { ETHER_ADDRESS, tokens, ether, GREEN, RED } from '../helpers'
+import { ETHER_ADDRESS, tokens, ether, GREEN, RED, formatBalance } from '../helpers'
 import moment from 'moment'
 
 const account = state => get(state, 'web3.account')
 export const accountSelector = createSelector(account, a => a)
 
+const web3 = state => get(state, 'web3.connection')
+export const web3Selector = createSelector(web3, w => w)
+
 const tokenLoaded = state => get(state, 'token.loaded', false)
 export const tokenLoadedSelector = createSelector(tokenLoaded, tl => tl)
+
+const token = state => get(state, 'token.contract')
+export const tokenSelector = createSelector(token, t => t)
 
 const exchangeLoaded = state => get(state, 'exchange.loaded', false)
 export const exchangeLoadedSelector = createSelector(exchangeLoaded, el => el)
@@ -241,27 +247,61 @@ export const priceChartSelector = createSelector(
 
     })
 
-    const buildGraphData = (orders) => {
-         orders = groupBy(orders, (o) => moment.unix(o.timestamp).startOf('hour').format())
-         const hours = Object.keys(orders)
-         const graphData = hours.map((hour) => {
-             const group = orders[hour]
-             const open = group[0]
-             const high = maxBy(group, 'tokenPrice')
-             const low = minBy(group, 'tokenPrice')
-             const close = group[group.length - 1]
+const buildGraphData = (orders) => {
+        orders = groupBy(orders, (o) => moment.unix(o.timestamp).startOf('hour').format())
+        const hours = Object.keys(orders)
+        const graphData = hours.map((hour) => {
+            const group = orders[hour]
+            const open = group[0]
+            const high = maxBy(group, 'tokenPrice')
+            const low = minBy(group, 'tokenPrice')
+            const close = group[group.length - 1]
 
-             return({
-                 x: new Date(hour),
-                 y: [open.tokenPrice, high.tokenPrice, low.tokenPrice, close.tokenPrice]
-             })
-         })
-        return graphData
+            return({
+                x: new Date(hour),
+                y: [open.tokenPrice, high.tokenPrice, low.tokenPrice, close.tokenPrice]
+            })
+        })
+    return graphData
+}
+
+const orderCancelling = state => get(state, 'exchange.orderCancelling', false)
+export const orderCancellingSelector = createSelector(orderCancelling, s => s)
+
+const orderFilling = state => get(state, 'exchange.orderFilling', false)
+export const orderFillingSelector = createSelector(orderFilling, s => s)
+
+const balancesLoading = state => get(state, 'exchange.balancesLoading', false)
+export const balancesLoadingSelector = createSelector(balancesLoading,s => s )
+
+const etherBalance = state => get(state, 'web3.balance', 0)
+export const etherBalanceSelector = createSelector(
+    etherBalance,
+    (balance) => {
+        return formatBalance(balance)
     }
+)
 
-    const orderCancelling = state => get(state, 'exchange.orderCancelling', false)
-    export const orderCancellingSelector = createSelector(orderCancelling, s => s)
+const tokenBalance = state => get(state, 'token.balance', 0)
+export const tokenBalanceselector = createSelector(
+    tokenBalance,
+    (balance) => {
+        return formatBalance(balance)
+    }
+)
 
+const exchangeEtherBalance = state => get(state, 'exchange.etherBalance', 0)
+export const exchangeEtherBalanceSelector = createSelector(
+    exchangeEtherBalance,
+    (balance) => {
+        return formatBalance(balance)
+    }
+)
 
-    const orderFilling = state => get(state, 'exchange.orderFilling', false)
-    export const orderFillingSelector = createSelector(orderFilling, s => s)
+const exchangeTokenBalance = state => get(state, 'exchange.tokenBalance', 0)
+export const exchangeTokenBalanceSelector = createSelector(
+    exchangeTokenBalance,
+    (balance) => {
+        return formatBalance(balance)
+    }
+)

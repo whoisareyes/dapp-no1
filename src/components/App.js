@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import 'bootstrap/dist/css/bootstrap.css'
 import './App.css'
-import Token from '../abis/Token.json'
 import { loadWeb3, loadAccount, loadToken, loadExchange } from '../store/interactions'
 import { connect } from 'react-redux'
 import Navbar from './Navbar'
