@@ -104,12 +104,40 @@ export function exchangeTokenBalanceLoaded(balance){
 
 export function balancesLoaded(){
     return {
-        type: 'BALANCES_LAODED'
+        type: 'BALANCES_LOADED'
     }
 }
 
 export function balancesLoading(){
     return {
         type: 'BALANCES_LOADING'
+    }
+}
+
+export function etherDepositAmountChanged(amount){
+    return {
+        type: 'ETHER_DEPOSIT_AMOUNT_CHANGED',
+        amount
+    }
+}
+
+export function etherWithdrawAmountChanged(amount){
+    return {
+        type: 'ETHER_WITHDRAW_AMOUNT_CHANGED',
+        amount
+    }
+}
+
+export function tokenDepositAmountChanged(amount){
+    return {
+        type: 'TOKEN_DEPOSIT_AMOUNT_CHANGED',
+        amount
+    }
+}
+
+export function tokenWithdrawAmountChanged(amount){
+    return {
+        type: 'TOKEN_WITHDRAW_AMOUNT_CHANGED',
+        amount
     }
 }
