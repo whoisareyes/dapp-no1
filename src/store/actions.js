@@ -1,3 +1,5 @@
+import { myFilledOrdersLoadedSelector } from "./selectors"
+
 export function web3Loaded(connection){
     return {
         type: 'WEB3_LOADED',
@@ -139,5 +141,52 @@ export function tokenWithdrawAmountChanged(amount){
     return {
         type: 'TOKEN_WITHDRAW_AMOUNT_CHANGED',
         amount
+    }
+}
+
+export function buyOrderAmountChanged(amount){
+    return {
+        type: 'BUY_ORDER_AMOUNT_CHANGED',
+        amount
+    }
+}
+
+export function buyOrderPriceChanged(price){
+    return {
+        type: 'BUY_ORDER_PRICE_CHANGED',
+        price
+    }
+}
+
+export function buyOrderMaking(price){
+    return {
+        type: 'BUY_ORDER_MAKING'
+    }
+}
+
+export function orderMade(order){
+    return {
+        type: 'ORDER_MADE',
+        order
+    }
+}
+
+export function sellOrderAmountChanged(amount){
+    return {
+        type: 'SELL_ORDER_AMOUNT_CHANGED',
+        amount
+    }
+}
+
+export function sellOrderPriceChanged(price){
+    return {
+        type: 'SELL_ORDER_PRICE_CHANGED',
+        price
+    }
+}
+
+export function sellOrderMaking(price){
+    return {
+        type: 'SELL_ORDER_MAKING'
     }
 }
