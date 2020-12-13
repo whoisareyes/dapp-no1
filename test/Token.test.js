@@ -7,7 +7,7 @@ require('chai')
 
 contract('Token', ([deployer, receiver, exchange]) => {
     const name = 'Wario Token'
-    const symbol = 'WARIO'
+    const symbol = 'WARI'
     const decimals = '18'
     const totalSupply =  tokens(1000000).toString()
     let token

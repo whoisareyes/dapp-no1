@@ -6,7 +6,7 @@ contract Token {
     
     // varibales
     string public name = "Wario Token";
-    string public symbol = 'WARIO';
+    string public symbol = 'WARI';
     uint256 public decimals = 18;
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
