@@ -65,8 +65,8 @@ class MyTransactions extends Component {
                                     <thead>
                                         <tr>
                                             <th>Time</th>
-                                            <th>WAI</th>
-                                            <th>WAI/ETH</th>
+                                            <th>WARI</th>
+                                            <th>WARI/ETH</th>
                                         </tr>
                                     </thead>
                                     { this.props.showMyFilledOrders ? showMyFilledOrders(this.props) : <Spinner type="table" /> }
@@ -77,7 +77,7 @@ class MyTransactions extends Component {
                                     <thead>
                                         <tr>
                                             <th>Amount</th>
-                                            <th>WAI/ETH</th>
+                                            <th>WARI/ETH</th>
                                             <th>Cancel</th>
                                         </tr>
                                     </thead>
